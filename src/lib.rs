@@ -62,6 +62,7 @@ impl ArithmeticCoder {
 
     // --- ENCODE DISPATCHER ---
     fn encode_step(&mut self, probs: &Bound<'_, PyAny>, symbol: usize) -> PyResult<()> {
+        // We use downcast which returns Result<&Bound<T>, ...>
         if let Ok(arr) = probs.downcast::<PyArray1<f32>>() {
             return self.encode_step_generic(arr.readonly(), symbol);
         }
@@ -77,7 +78,8 @@ impl ArithmeticCoder {
 
         // Fallback: Python-side cast to f32
         let py = probs.py();
-        let numpy_mod = py.import_bound("numpy")?;
+        // FIXED: py.import_bound -> py.import
+        let numpy_mod = py.import("numpy")?;
         let arr_f32 = numpy_mod.call_method1("array", (probs, "float32"))?
                                .downcast_into::<PyArray1<f32>>()?;
         
@@ -100,7 +102,8 @@ impl ArithmeticCoder {
         }
 
         let py = probs.py();
-        let numpy_mod = py.import_bound("numpy")?;
+        // FIXED: py.import_bound -> py.import
+        let numpy_mod = py.import("numpy")?;
         let arr_f32 = numpy_mod.call_method1("array", (probs, "float32"))?
                                .downcast_into::<PyArray1<f32>>()?;
         
