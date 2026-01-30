@@ -16,9 +16,9 @@ jobs:
           args: --release --out dist --find-interpreter
           manylinux: auto
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # UPDATED to v4
         with:
-          name: wheels
+          name: wheels-linux
           path: dist
 
   windows:
@@ -30,9 +30,9 @@ jobs:
           command: build
           args: --release --out dist --find-interpreter
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # UPDATED to v4
         with:
-          name: wheels
+          name: wheels-windows
           path: dist
 
   macos:
@@ -44,9 +44,9 @@ jobs:
           command: build
           args: --release --out dist --find-interpreter
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # UPDATED to v4
         with:
-          name: wheels
+          name: wheels-macos
           path: dist
 
   release:
@@ -55,13 +55,15 @@ jobs:
     needs: [linux, windows, macos]
     environment: pypi
     permissions:
-      id-token: write  # IMPORTANT: This is required for trusted publishing
+      id-token: write
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4  # UPDATED to v4
         with:
-          name: wheels
+          pattern: wheels-* # v4 supports pattern matching to merge artifacts
+          path: dist
+          merge-multiple: true # This merges all downloaded artifacts into one dir
       - name: Publish to PyPI
         uses: PyO3/maturin-action@v1
         with:
           command: upload
-          args: --non-interactive --skip-existing *
+          args: --non-interactive --skip-existing dist/*
