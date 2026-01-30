@@ -63,13 +63,13 @@ class DistributionCoder:
                 if str(dist.device) != "cpu":
                     dist = dist.cpu()
 
-            # This returns a numpy array (which might be f32, f16, bf16)
+            # This returns a numpy array
             return dist.numpy()
 
-        # If it's already a numpy array, return as is.
-        # Rust will handle f16/bf16/f32/f64 natively.
+        # If it's already a numpy array, return as is (Zero-Copy pass-through).
         if isinstance(dist, np.ndarray):
             return dist
 
-        # Fallback for Lists/Tuples: Convert to f32 numpy array
-        return np.array(dist, dtype=np.float32, copy=False)
+        # Fallback for Lists/Tuples: Convert to f32 numpy array.
+        # FIX: Removed 'copy=False' because Lists MUST be copied to become Arrays.
+        return np.array(dist, dtype=np.float32)

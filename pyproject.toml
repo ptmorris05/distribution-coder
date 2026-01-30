@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "distribution-coder"
-version = "0.1.0"
+version = "0.1.1"
 description = "Fast arithmetic coding over symbol probability distributions in Rust."
 authors = [{name = "Paul Morris", email = "ptmorris03@gmail.com"}]
 readme = "README.md"
