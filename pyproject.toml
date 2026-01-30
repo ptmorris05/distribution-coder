@@ -1,0 +1,19 @@
+[build-system]
+requires = ["maturin>=1.0"]
+build-backend = "maturin"
+
+[project]
+name = "distribution-coder"
+version = "0.1.0"
+description = "Fast arithmetic coding over symbol probability distributions in Rust."
+authors = [{name = "Paul Morris", email = "ptmorris03@gmail.com"}]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.0",
+]
+
+[tool.maturin]
+python-source = "python"
+# Maps the Rust binary to a private module inside the python package
+module-name = "distribution_coder._distribution_coder"

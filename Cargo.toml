@@ -1,0 +1,21 @@
+[package]
+name = "_distribution_coder"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "_distribution_coder"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.27.2", features = ["extension-module", "abi3-py38"] }
+numpy = "0.27.1"
+# "use-intrinsics" removed for safety. 
+# "num-traits" and "bytemuck" enabled for zero-copy casting support.
+half = { version = "2.7.1", features = ["num-traits", "bytemuck"] }
+
+[profile.release]
+lto = "fat"        # Link Time Optimization for max speed
+codegen-units = 1  # Slower build, faster binary
+panic = "abort"    # Reduce binary size
+strip = true       # Remove debug symbols

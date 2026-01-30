@@ -1,0 +1,7 @@
+target/
+__pycache__/
+*.so
+*.pyd
+*.whl
+.venv/
+dist/
